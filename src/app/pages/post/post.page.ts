@@ -107,4 +107,8 @@ export class PostPage implements OnInit {
       });
     });
   }
+
+  showMap() {
+    this.navCtrl.navigateForward("/map");
+  }
 }
