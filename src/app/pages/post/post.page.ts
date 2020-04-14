@@ -85,4 +85,15 @@ export class PostPage implements OnInit {
   close() {
     this.navCtrl.navigateBack('/home');
   }
+
+  saveLocal() {
+    localStorage.setItem('pedrogram.post', JSON.stringify(this.post));
+  }
+
+  submit() {
+    this.post.image = "";
+    this.db.collection('posts').add(this.post);
+    localStorage.removeItem('pedrogram.post');
+    this.navCtrl.navigateBack("/home");
+  }
 }
