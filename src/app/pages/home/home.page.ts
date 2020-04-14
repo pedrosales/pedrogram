@@ -1,12 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ToastController, NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
-  constructor() {}
+  constructor(
+    private toastCtrl: ToastController,
+    private navCtrl: NavController
+  ) { }
+
+  ngOnInit() {
+    const img = localStorage.getItem('pedrogram.post');
+    if (img) this.showMessage("Você tem uma publicação não salva");
+  }
+
+  async showMessage(message: string) {
+    const toast = await this.toastCtrl.create({
+      message: message, duration: 3000, buttons: [
+        {
+          icon: "send",
+          handler: () => {
+            this.navCtrl.navigateForward("/post");
+          }
+        }
+      ]
+    });
+
+    toast.present();
+  }
 
 }
