@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Post } from 'src/app/models/post.model';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { ToastController, NavController, AlertController } from '@ionic/angular';
-import { NavigationError } from '@angular/router';
 
 @Component({
   selector: 'app-post',
@@ -13,6 +12,9 @@ import { NavigationError } from '@angular/router';
 export class PostPage implements OnInit {
   public post: Post = new Post('', '', null);
   public filters: string[] = [];
+
+  public task: AngularFireUploadTask;
+  public progress: any;
 
   constructor(
     private db: AngularFirestore,
@@ -91,9 +93,18 @@ export class PostPage implements OnInit {
   }
 
   submit() {
-    this.post.image = "";
-    this.db.collection('posts').add(this.post);
-    localStorage.removeItem('pedrogram.post');
-    this.navCtrl.navigateBack("/home");
+    const filePath = `post_${new Date().getTime()}.jpg`;
+    this.task = this.storage.ref(filePath).putString(this.post.image, 'data_url');
+    this.progress = this.task.percentageChanges();
+
+    this.task.then((data) => {
+      const ref = this.storage.ref(data.metadata.fullPath);
+      ref.getDownloadURL().subscribe((imgUrl) => {
+        this.post.image = imgUrl;
+        this.db.collection('posts').add(this.post);
+        localStorage.removeItem('pedrogram.post');
+        this.navCtrl.navigateBack("/home");
+      });
+    });
   }
 }
