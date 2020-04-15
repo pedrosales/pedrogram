@@ -3,7 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: 'home', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule) },
+  { path: 'home2', loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule) },
   {
     path: 'take-photo',
     loadChildren: () => import('./pages/take-photo/take-photo.module').then(m => m.TakePhotoPageModule)
@@ -14,7 +14,15 @@ const routes: Routes = [
   },
   {
     path: 'map',
-    loadChildren: () => import('./pages/map/map.module').then( m => m.MapPageModule)
+    loadChildren: () => import('./pages/map/map.module').then(m => m.MapPageModule)
+  },
+  {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginPageModule)
+  },
+  {
+    path: 'home',
+    loadChildren: () => import('./pages/signup/signup.module').then(m => m.SignupPageModule)
   },
 ];
 
