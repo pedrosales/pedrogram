@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { AngularFireModule } from '@angular/fire';
 import { environment } from '../environments/environment';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import { environment } from '../environments/environment';
     AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [
+    AuthGuard,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

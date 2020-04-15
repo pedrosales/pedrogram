@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { LoadingController, NavController, ToastController } from '@ionic/angular';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { sharedStylesheetJitUrl } from '@angular/compiler';
 import { User } from 'src/app/models/user.model';
+import { auth } from 'firebase';
 
 @Component({
   selector: 'app-login',
@@ -59,5 +59,18 @@ export class LoginPage implements OnInit {
 
   async goToSignup() {
     this.navCtrl.navigateForward('signup');
+  }
+
+  async signInWithGoogle() {
+    this.fbAuth.signInWithPopup(new auth.GoogleAuthProvider())
+      .then((data) => {
+        console.log(data);
+        localStorage.setItem('pedrogram.user', JSON.stringify(new User(data.user.displayName, data.user.email, data.user.photoURL)));
+        this.navCtrl.navigateRoot('home');
+      })
+      .catch((error) => {
+        console.log(error);
+        this.showMessage("Usuário ou senha inválidos");
+      })
   }
 }
